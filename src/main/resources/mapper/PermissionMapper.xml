@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edusystem.org.mapper.PermissionMapper">
+    <resultMap id="permissionMap" type="edusystem.org.entity.Permission">
+        <result column="permission_param" property="permissionParam"/>
+    </resultMap>
+    <select id="getUserPermission" resultMap="permissionMap">
+       SELECT
+            p.permission_param
+        FROM
+            role r
+        LEFT JOIN user_role ur ON (r.role_id = ur.role_id)
+        LEFT JOIN user u ON (u.user_id = ur.user_id)
+        LEFT JOIN role_permission rp ON (rp.role_id = r.role_id)
+        LEFT JOIN permission p ON (p.permission_id = rp.permission_id)
+        WHERE
+            u.account = #{account}
+        AND p.permission_param is not null
+        AND u.delete_status = 0
+    </select>
+
+</mapper>
